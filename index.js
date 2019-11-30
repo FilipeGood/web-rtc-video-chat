@@ -7,6 +7,17 @@ let pc;
 const createRoomPage = document.getElementById("create-room");
 const roomPage = document.getElementById("room-page");
 const button = document.getElementById("create-button");
+const joinButton = document.getElementById("join-room-button");
+
+joinButton.addEventListener("click", joinRoomByName);
+
+function joinRoomByName() {
+  roomId = document.getElementById("join-room-name").value.toString(16);
+  location.hash = roomId.toString(16);
+  createRoomPage.style.display = "none";
+  roomPage.style.display = "block";
+  joinRoom();
+}
 
 function handleClick() {
   roomId = createRoom();
@@ -33,12 +44,12 @@ if (location.hash) {
 function joinRoom() {
   // Room name needs to be prefixed with 'observable-'
   roomName = "observable-" + roomId;
-
   drone.on("open", error => {
     if (error) {
       return console.error(error);
     }
     room = drone.subscribe(roomName);
+
     room.on("open", error => {
       if (error) {
         onError(error);
